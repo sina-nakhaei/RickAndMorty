@@ -26,3 +26,9 @@ data class Info(
     @SerialName("prev")
     val prev: String?
 )
+
+inline fun <T, R> BasePaginatedResponse<T>.extractAndMapResult(
+    crossinline transform: (T) -> R
+): List<R> {
+    return this.results.map(transform)
+}
