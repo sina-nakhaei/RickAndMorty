@@ -1,7 +1,10 @@
 package com.example.rickandmorty.core.data.remotedatasource.characters.model
 
+import com.example.rickandmorty.core.ui.model.CharacterUiModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import com.example.rickandmorty.core.ui.model.Location as UiLocation
+import com.example.rickandmorty.core.ui.model.Origin as UiOrigin
 
 @Serializable
 data class CharacterResponse(
@@ -49,7 +52,9 @@ data class Origin(
 
     @SerialName("url")
     val url: String
-)
+) {
+    fun asUiModel() = UiOrigin(name, url)
+}
 
 @Serializable
 data class Location(
@@ -58,4 +63,21 @@ data class Location(
 
     @SerialName("url")
     val url: String
+) {
+    fun asUiModel() = UiLocation(name, url)
+}
+
+fun CharacterResponse.asUiModel() = CharacterUiModel(
+    id,
+    name,
+    status,
+    species,
+    type,
+    gender,
+    origin.asUiModel(),
+    location.asUiModel(),
+    image,
+    episode,
+    url,
+    created,
 )
