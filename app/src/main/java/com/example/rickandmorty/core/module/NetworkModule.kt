@@ -21,7 +21,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val baseUrl: String = ""
+    private const val baseUrl: String = "rickandmortyapi.com/api"
 
     @Provides
     @Singleton
