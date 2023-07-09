@@ -1,9 +1,9 @@
 package com.example.rickandmorty.core.module
 
-import com.example.rickandmorty.core.data.localdatasource.characters.CharacterRepository
-import com.example.rickandmorty.core.data.localdatasource.characters.CharacterRepositoryDefault
 import com.example.rickandmorty.core.data.remotedatasource.characters.CharacterRemoteDataSource
 import com.example.rickandmorty.core.data.remotedatasource.characters.CharacterRemoteDataSourceDefault
+import com.example.rickandmorty.core.data.repository.characters.CharacterRepository
+import com.example.rickandmorty.core.data.repository.characters.CharacterRepositoryDefault
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
