@@ -12,12 +12,11 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class CharacterRemoteDataSourceDefault @Inject constructor(
-    private val client: HttpClient
+    private val api: CharacterApi
 ) : CharacterRemoteDataSource {
     override fun getAllCharacters(): Flow<Result<BasePaginatedResponse<CharacterResponse>>> =
         resultFlow {
-            val response: BasePaginatedResponse<CharacterResponse> =
-                client.get(ApiEndpoints.CHARACTERS).body()
+            val response = api.getAllCharacters()
 
             emit(Result.Success(response))
         }
