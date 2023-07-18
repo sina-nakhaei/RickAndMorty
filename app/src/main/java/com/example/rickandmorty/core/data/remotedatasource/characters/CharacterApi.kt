@@ -4,5 +4,5 @@ import com.example.rickandmorty.core.data.remotedatasource.characters.model.Char
 import com.example.rickandmorty.core.model.BasePaginatedResponse
 
 interface CharacterApi {
-    suspend fun getAllCharacters(): BasePaginatedResponse<CharacterResponse>
+    suspend fun getAllCharacters(page: Int): BasePaginatedResponse<CharacterResponse>
 }

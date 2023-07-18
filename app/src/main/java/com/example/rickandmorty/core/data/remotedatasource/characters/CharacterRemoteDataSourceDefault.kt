@@ -10,9 +10,9 @@ import javax.inject.Inject
 class CharacterRemoteDataSourceDefault @Inject constructor(
     private val api: CharacterApi
 ) : CharacterRemoteDataSource {
-    override fun getAllCharacters(): Flow<NetworkResult<BasePaginatedResponse<CharacterResponse>>> =
+    override fun getAllCharacters(page: Int): Flow<NetworkResult<BasePaginatedResponse<CharacterResponse>>> =
         resultFlow {
-            val response = api.getAllCharacters()
+            val response = api.getAllCharacters(page)
 
             emit(NetworkResult.Success(response))
         }

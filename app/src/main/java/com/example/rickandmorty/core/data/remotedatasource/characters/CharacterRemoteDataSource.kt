@@ -6,5 +6,5 @@ import com.example.rickandmorty.core.model.NetworkResult
 import kotlinx.coroutines.flow.Flow
 
 interface CharacterRemoteDataSource {
-    fun getAllCharacters(): Flow<NetworkResult<BasePaginatedResponse<CharacterResponse>>>
+    fun getAllCharacters(page: Int): Flow<NetworkResult<BasePaginatedResponse<CharacterResponse>>>
 }

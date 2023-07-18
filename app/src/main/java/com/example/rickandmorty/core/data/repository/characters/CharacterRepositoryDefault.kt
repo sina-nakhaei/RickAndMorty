@@ -14,11 +14,11 @@ class CharacterRepositoryDefault @Inject constructor(
     private val remoteDataSource: CharacterRemoteDataSource
 ) : CharacterRepository {
 
-    override fun getAllCharacters(): Flow<NetworkResult<List<CharacterUiModel>>> =
-        getAllCharactersFromRemote()
+    override fun getAllCharacters(page: Int): Flow<NetworkResult<List<CharacterUiModel>>> =
+        getAllCharactersFromRemote(page)
 
-    private fun getAllCharactersFromRemote() = remoteDataSource
-        .getAllCharacters()
+    private fun getAllCharactersFromRemote(page: Int) = remoteDataSource
+        .getAllCharacters(page)
         .map { result ->
             result.map { response ->
                 response.extractAndMapResult { character ->
