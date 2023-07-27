@@ -1,5 +1,6 @@
 package com.example.rickandmorty.core.module
 
+import com.example.rickandmorty.core.network.NetworkConnectivityInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,7 +26,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideKtorClient(): HttpClient {
+    fun provideKtorClient(networkConnectivityInterceptor: NetworkConnectivityInterceptor): HttpClient {
         return HttpClient(OkHttp) {
             expectSuccess = true
             defaultRequest {
@@ -45,6 +46,13 @@ object NetworkModule {
                     ignoreUnknownKeys = true
                 })
             }
+
+            engine {
+                config {
+                    addInterceptor(networkConnectivityInterceptor)
+                }
+            }
         }
     }
+
 }
