@@ -13,6 +13,5 @@ fun <T> resultFlow(
 }
     .onStart { emit(NetworkResult.Loading) }
     .catch {
-        //TODO: Handle different types of error
-        emit(NetworkResult.Error("", ""))
+        emit(NetworkResult.Error("", it))
     }

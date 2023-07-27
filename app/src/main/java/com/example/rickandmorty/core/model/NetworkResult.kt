@@ -7,7 +7,7 @@ sealed interface NetworkResult<out T> {
 
     data class Error(
         val message: String? = null,
-        val type: String
+        val throwable: Throwable? = null
     ) : NetworkResult<Nothing>
 
     object Loading : NetworkResult<Nothing>
