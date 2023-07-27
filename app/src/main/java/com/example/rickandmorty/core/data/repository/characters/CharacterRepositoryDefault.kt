@@ -1,29 +1,21 @@
 package com.example.rickandmorty.core.data.repository.characters
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.example.rickandmorty.core.data.pagingsource.characters.CharacterPagingSource
 import com.example.rickandmorty.core.data.remotedatasource.characters.CharacterRemoteDataSource
-import com.example.rickandmorty.core.data.remotedatasource.characters.model.asUiModel
-import com.example.rickandmorty.core.model.NetworkResult
-import com.example.rickandmorty.core.model.extractAndMapResult
-import com.example.rickandmorty.core.model.map
-import com.example.rickandmorty.core.ui.model.CharacterUiModel
+import com.example.rickandmorty.core.data.remotedatasource.characters.model.CharacterResponse
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class CharacterRepositoryDefault @Inject constructor(
     private val remoteDataSource: CharacterRemoteDataSource
 ) : CharacterRepository {
+    private val characters = Pager(config = PagingConfig(20)) {
+        CharacterPagingSource(remoteDataSource)
+    }
 
-    override fun getAllCharacters(page: Int): Flow<NetworkResult<List<CharacterUiModel>>> =
-        getAllCharactersFromRemote(page)
-
-    private fun getAllCharactersFromRemote(page: Int) = remoteDataSource
-        .getAllCharacters(page)
-        .map { result ->
-            result.map { response ->
-                response.extractAndMapResult { character ->
-                    character.asUiModel()
-                }
-            }
-        }
+    override fun getAllCharacters(): Flow<PagingData<CharacterResponse>> =
+        characters.flow
 }

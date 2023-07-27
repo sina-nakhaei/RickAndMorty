@@ -1,9 +1,9 @@
 package com.example.rickandmorty.core.data.repository.characters
 
-import com.example.rickandmorty.core.model.NetworkResult
-import com.example.rickandmorty.core.ui.model.CharacterUiModel
+import androidx.paging.PagingData
+import com.example.rickandmorty.core.data.remotedatasource.characters.model.CharacterResponse
 import kotlinx.coroutines.flow.Flow
 
 interface CharacterRepository {
-    fun getAllCharacters(page: Int): Flow<NetworkResult<List<CharacterUiModel>>>
+    fun getAllCharacters(): Flow<PagingData<CharacterResponse>>
 }
