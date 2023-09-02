@@ -22,8 +22,8 @@ class CharacterPagingSource(
 
         return when (val result = dataSource.getAllCharacters(page).last()) {
             is NetworkResult.Error -> {
-                //TODO: handle errors
-                LoadResult.Error(Exception(""))
+                val ex = result.throwable ?: UnknownError()
+                LoadResult.Error(ex)
             }
 
             is NetworkResult.Success -> {
@@ -37,7 +37,7 @@ class CharacterPagingSource(
                 )
             }
             //TODO: handle errors
-            else -> LoadResult.Error(Exception(""))
+            else -> LoadResult.Error(UnknownError())
         }
     }
 }
