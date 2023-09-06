@@ -1,11 +1,13 @@
 package com.example.rickandmorty.ui.screen.home
 
-import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,8 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemContentType
-import androidx.paging.log
+import com.example.rickandmorty.core.ui.components.CharacterCard
 import com.example.rickandmorty.core.ui.model.CharacterUiModel
 
 @Composable
@@ -29,7 +30,6 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Color(0xFF439AC2))
     ) {
-        Log.d("sinatest", "HomeScreen: $uiState")
         when (uiState) {
             is Loading -> {
                 Loading()
@@ -55,28 +55,29 @@ private fun Loading() {
 
 @Composable
 private fun Container(characters: LazyPagingItems<CharacterUiModel>) {
-
-    val state = characters.loadState.refresh
-    Log.d("sinatest","state: $state")
-    when(state){
+    when (characters.loadState.refresh) {
         is LoadState.Loading -> Loading()
-        is LoadState.NotLoading -> CharactersColumn(characters)
+        is LoadState.NotLoading -> CharactersGrid(characters)
         else -> {
             Text(text = "Error")
         }
     }
-
 }
 
 @Composable
-private fun CharactersColumn(characters: LazyPagingItems<CharacterUiModel>) {
-    LazyColumn {
-        items(
-            count = characters.itemCount,
-            contentType = characters.itemContentType()
-        ) { index ->
-            characters[index]?.let {
-                Text(text = it.name)
+private fun CharactersGrid(characters: LazyPagingItems<CharacterUiModel>) {
+    LazyVerticalGrid(
+        contentPadding = PaddingValues(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        columns = GridCells.Fixed(2)
+    ) {
+        items(characters.itemCount) { index ->
+            characters[index]?.let { character ->
+                CharacterCard(
+                    onClick = {  },
+                    character = character
+                )
             }
         }
     }
