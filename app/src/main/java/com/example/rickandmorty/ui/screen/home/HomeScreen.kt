@@ -1,5 +1,6 @@
 package com.example.rickandmorty.ui.screen.home
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,10 +9,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
@@ -33,13 +37,8 @@ fun HomeScreen(
             .background(Color(0xFF439AC2))
     ) {
         when (uiState) {
-            is Loading -> {
-                Loading()
-            }
-
-            is Success -> {
-                Container(uiState.characters.collectAsLazyPagingItems())
-            }
+            is Loading -> Loading()
+            is Success -> Container(uiState.characters.collectAsLazyPagingItems())
         }
     }
 }
@@ -61,9 +60,7 @@ private fun Container(characters: LazyPagingItems<CharacterUiModel>) {
     when (characters.loadState.refresh) {
         is LoadState.Loading -> Loading()
         is LoadState.NotLoading -> CharactersGrid(characters)
-        else -> {
-            Text(text = "Error")
-        }
+        else -> Error(onClick = { characters.retry() })
     }
 }
 
@@ -72,8 +69,11 @@ private fun CharactersGrid(characters: LazyPagingItems<CharacterUiModel>) {
     GridTemplate {
         items(characters.itemCount) { index ->
             characters[index]?.let { character ->
+                val context = LocalContext.current
                 CharacterCard(
-                    onClick = { },
+                    onClick = {
+                        Toast.makeText(context, character.name, Toast.LENGTH_SHORT).show()
+                    },
                     character = character
                 )
             }
@@ -92,5 +92,18 @@ private fun GridTemplate(
         columns = GridCells.Fixed(2)
     ) {
         content()
+    }
+}
+
+@Composable
+private fun Error(onClick: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(onClick = onClick) {
+            Text(text = "Try Again!")
+        }
     }
 }
