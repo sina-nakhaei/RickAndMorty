@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,14 +30,13 @@ import com.example.rickandmorty.ui.screen.home.components.CharacterCardLoadingPl
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    uiState: HomeUiState = viewModel.uiState.value
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF439AC2))
     ) {
-        when (uiState) {
+        when (val uiState = viewModel.uiState.collectAsState().value) {
             is Loading -> Loading()
             is Success -> Container(uiState.characters.collectAsLazyPagingItems())
         }
